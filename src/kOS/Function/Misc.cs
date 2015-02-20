@@ -9,6 +9,7 @@ using kOS.Safe.Module;
 using kOS.Safe.Persistence;
 using kOS.Suffixed;
 using kOS.Utilities;
+using kOS.Safe.Utilities;
 
 namespace kOS.Function
 {
@@ -103,7 +104,7 @@ namespace kOS.Function
             }
             else if (!Staging.separate_ready)
             {
-                Safe.Utilities.Debug.Logger.Log("FAIL SILENT: Stage is called before it is ready, Use STAGE:READY to check first if staging rapidly");
+                SafeHouse.Logger.Log("FAIL SILENT: Stage is called before it is ready, Use STAGE:READY to check first if staging rapidly");
             }
             else if (!shared.Vessel.isActiveVessel)
             {
@@ -292,7 +293,11 @@ namespace kOS.Function
     {
         public override void Execute(SharedObjects shared)
         {
-            if (shared.Cpu != null) shared.Cpu.Boot();
+            if (shared.Processor != null)
+            {
+                shared.Processor.SetMode(ProcessorModes.OFF);
+                shared.Processor.SetMode(ProcessorModes.READY);
+            }
         }
     }
 

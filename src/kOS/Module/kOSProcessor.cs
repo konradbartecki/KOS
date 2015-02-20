@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using kOS.AddOns.RemoteTech;
 using kOS.Execution;
 using kOS.Factories;
 using kOS.Function;
@@ -18,7 +19,6 @@ using kOS.Safe.Compilation.KS;
 using kOS.Safe.Module;
 using kOS.Safe.Screen;
 using kOS.Suffixed;
-using kOS.AddOns.RemoteTech2;
 using Debug = UnityEngine.Debug;
 
 namespace kOS.Module
@@ -528,7 +528,8 @@ namespace kOS.Module
                 switch (newProcessorMode)
                 {
                     case ProcessorModes.READY:
-                        if (ProcessorMode == ProcessorModes.STARVED && shared.Cpu != null) shared.Cpu.Boot();
+                        if ((ProcessorMode == ProcessorModes.STARVED || ProcessorMode == ProcessorModes.OFF) && shared.Cpu != null)
+                            shared.Cpu.Boot();
                         if (shared.Interpreter != null) shared.Interpreter.SetInputLock(false);
                         if (shared.Window != null) shared.Window.IsPowered = true;
                         break;
@@ -537,6 +538,7 @@ namespace kOS.Module
                     case ProcessorModes.STARVED:
                         if (shared.Interpreter != null) shared.Interpreter.SetInputLock(true);
                         if (shared.Window != null) shared.Window.IsPowered = false;
+                        if (shared.BindingMgr != null) shared.BindingMgr.UnBindAll(); 
                         break;
                 }
 
